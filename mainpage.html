@@ -155,18 +155,54 @@
             border-top: 1px solid #1f2937;
         }
 
-        @media(min-width:768px) {
+        /* 🔥 RESPONSIVE BREAKPOINT */
+        @media (min-width: 768px) {
+
             .grid {
-                grid-template-columns: repeat(2, 1fr)
+                grid-template-columns: repeat(3, 1fr);
             }
 
-            iframe {
-                height: 400px
+            .pricing {
+                grid-template-columns: repeat(3, 1fr);
             }
 
-            .section {
-                padding: 60px 40px
+            .hero h2 {
+                font-size: 48px;
             }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+        }
+
+        /* 📱 MOBILE NAVIGATION */
+        @media (max-width: 768px) {
+
+            nav {
+                position: absolute;
+                top: 70px;
+                right: 0;
+                background: #020617;
+                width: 200px;
+                flex-direction: column;
+                display: none;
+                padding: 20px;
+                border-left: 1px solid #1f2937;
+            }
+
+            nav a {
+                margin: 10px 0;
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
         }
     </style>
 </head>
