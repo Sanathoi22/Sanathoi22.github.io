@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sanathoi Mainam | Web Architect</title>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0d1117, #020617);
+            color: #e6edf3;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 50px;
+            border-bottom: 1px solid #1f2937;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            background: rgba(2, 6, 23, 0.7);
+        }
+
+        header h1 {
+            color: #58a6ff;
+            font-size: 22px;
+        }
+
+        nav a {
+            margin-left: 25px;
+            text-decoration: none;
+            color: #cbd5f5;
+            font-weight: 500;
+        }
+
+        .hero {
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #58a6ff, #22c55e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            max-width: 600px;
+            margin: auto;
+            color: #9ca3af;
+            font-size: 18px;
+        }
+
+        .btn {
+            margin-top: 30px;
+            padding: 14px 28px;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #58a6ff, #22c55e);
+            color: black;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline {
+            margin-top: 15px;
+            padding: 12px 26px;
+            border-radius: 8px;
+            border: 1px solid #22c55e;
+            color: #22c55e;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .section {
+            padding: 80px 50px;
+        }
+
+        .section h2 {
+            font-size: 30px;
+            margin-bottom: 30px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: #58a6ff;
+        }
+
+        .pricing {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .price-card {
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .price {
+            font-size: 28px;
+            margin: 15px 0;
+        }
+
+        form {
+            max-width: 500px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input,
+        textarea {
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: #020617;
+            color: white;
+        }
+
+        button {
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #58a6ff, #22c55e);
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* WhatsApp Floating Button */
+        .whatsapp {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #22c55e;
+            color: black;
+            padding: 15px 18px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Funnel Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #020617;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid #1f2937;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #6b7280;
+            border-top: 1px solid #1f2937;
+        }
+
+        @media(min-width:768px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            iframe {
+                height: 400px
+            }
+
+            .section {
+                padding: 60px 40px
+            }
+        }
+
+        iframe {
+            width: 100%;
+            height: 500px;
+            border-radius: 10px;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Sanathoi.dev</h1>
+        <nav>
+            <a href="mainpage.html">Home</a>
+            <a href="#booking">Booking</a>
+            <a href="#pay">Payment</a>
+            <a href="#dashboard">Dashboard</a>
+            <a href="#" onclick="openFunnel()">Hire Me</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>Design. Build. Convert.</h2>
+        <p>I build websites that don't just look good — they bring clients. Watch my journey and hire me to scale yours.
+        </p>
+        <a class="btn" href="#" onclick="openFunnel()">Start Your Project</a>
+        <br>
+        <a class="btn-outline" href="https://wa.me/8787586639" target="_blank">Chat on WhatsApp</a>
+    </section>
+
+    <section class="hero">
+        <h2>Client System 2.0</h2>
+        <p>Automated pipeline: Booking → Payment → Project Start</p>
+        <a class="btn" href="#booking">Book a Call</a>
+    </section>
+
+    <section class="section" id="booking">
+        <h2>Book a Call</h2>
+        <p>Clients can directly schedule a meeting with you.</p>
+
+        <!-- Replace with your Calendly link -->
+        <iframe src="https://calendly.com/YOUR-USERNAME"></iframe>
+    </section>
+
+    <section class="section" id="pay">
+        <h2>Secure Payment</h2>
+        <div class="grid">
+
+            <div class="price-card">
+                <h3>Starter</h3>
+                <p>₹5,000</p>
+                <a class="btn" href="https://rzp.io/l/YOUR-LINK" target="_blank">Pay Now</a>
+            </div>
+
+            <div class="price-card">
+                <h3>Pro</h3>
+                <p>₹15,000</p>
+                <a class="btn" href="https://rzp.io/l/YOUR-LINK" target="_blank">Pay Now</a>
+            </div>
+
+            <div class="price-card">
+                <h3>Premium</h3>
+                <p>₹30,000+</p>
+                <a class="btn" href="https://rzp.io/l/YOUR-LINK" target="_blank">Pay Now</a>
+            </div>
+
+        </div>
+    </section>
+
+
+
+    <section class="section" id="dashboard">
+        <h2>Client Dashboard (Basic)</h2>
+        <p>This is a simple client tracking panel (demo version).</p>
+
+        <div class="grid">
+            <div class="card">
+                <h3>Project Status</h3>
+                <p id="status">Not Started</p>
+                <button class="btn" onclick="updateStatus()">Update Status</button>
+            </div>
+
+            <div class="card">
+                <h3>Upload Files</h3>
+                <input type="file">
+            </div>
+
+            <div class="card">
+                <h3>Messages</h3>
+                <textarea placeholder="Send message..."></textarea>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>Email Automation Setup</h2>
+        <p>Use FormSubmit (free) to receive emails instantly.</p>
+
+        <form action="https://formsubmit.co/YOUR-EMAIL@gmail.com" method="POST">
+            <input type="text" name="name" placeholder="Client Name" required>
+            <input type="email" name="email" placeholder="Client Email" required>
+            <textarea name="message" placeholder="Project Details"></textarea>
+
+            <!-- Auto reply -->
+            <input type="hidden" name="_autoresponse"
+                value="Thanks! I received your request. I will contact you within 24 hours.">
+
+            <button class="btn" type="submit">Send</button>
+        </form>
+    </section>
+
+
+    <section class="section" id="contact">
+        <h2>Hire Me</h2>
+        <form onsubmit="submitForm(event)">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea rows="5" placeholder="Tell me about your project"></textarea>
+            <button type="submit">Send Request</button>
+        </form>
+    </section>
+
+    <!-- Funnel Modal -->
+    <div class="modal" id="funnelModal">
+        <div class="modal-content">
+            <h2>Start Your Project</h2>
+            <form onsubmit="submitFunnel(event)">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea placeholder="Describe your project"></textarea>
+                <button type="submit">Submit & Continue</button>
+            </form>
+        </div>
+    </div>
+
+    <a class="whatsapp" href="https://wa.me/8787586639" target="_blank">WhatsApp</a>
+
+    <footer>
+        <p>© 2026 Sanathoi Mainam | Premium Web Architect</p>
+    </footer>
+
+    <script>
+        function openFunnel() {
+            document.getElementById('funnelModal').style.display = 'flex';
+        }
+
+        function submitFunnel(e) {
+            e.preventDefault();
+            alert('Step 1 complete. Redirecting to WhatsApp...');
+            window.location.href = 'https://wa.me/8787586639';
+        }
+
+        function submitForm(e) {
+            e.preventDefault();
+            alert("Request sent! I'll contact you soon.");
+        }
+    </script>
+    <!-- <section class="section">
+        <h2>Pricing</h2>
+        <div class="pricing">
+            <div class="price-card">
+                <h3>Starter</h3>
+                <div class="price">₹5,000</div>
+                <p>Basic website for individuals</p>
+            </div>
+            <div class="price-card">
+                <h3>Pro</h3>
+                <div class="price">₹15,000</div>
+                <p>Business website + client funnel</p>
+            </div>
+            <div class="price-card">
+                <h3>Premium</h3>
+                <div class="price">₹30,000+</div>
+                <p>Full system + automation + scaling</p>
+            </div>
+        </div>
+    </section>
+    -->
+
+</body>
+
+</html>
